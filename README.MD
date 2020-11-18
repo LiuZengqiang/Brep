@@ -6,14 +6,16 @@ freeglut + glm + JsonCpp
 visual studio 2019 + CMake
 
 ### 实现功能
-
-1. 实现五种基本欧拉操作：mvsf()，mev()，mef()，kemr()，kfmrh()。
+1. 实现五种基本欧拉操作：mvsf()，mev()，mef()，kemr()，kfmrh().
 2. 实现sweep构造实体。
 3. 显示实体：增加一个光源，便于观察判断面的法向。
+4. **使用w、a、s、d按键控制转动视角，使用4、6、2、8按键控制光源位置(注意需要在英文输入法下)。**
+
+5. **若读者实验环境不同，可以直接运行Brep\release\Brep.exe ，该可执行文件的输入文件为Brep\release\inputFile\data.json**
 
 ### 主要代码结构
     - Brep/Brep/src/datastrcut 中包含Solid、Face、Loop、Edge、Halfedge和Vertex数据结构。
-    - Brep/Brep/src/scene 中包含mvsf()，mev()，mef()，kemr()，kfmrh()五种欧拉操作的代码。
+    - Brep/Brep/src/scene 中包含mvsf()、mev()、mef()、kemr()、kfmrh()五种欧拉操作的代码。
     - Brep/Brep/src/sweeper 中的包含sweep的算法代码和调用opengl显示三维实体的代码。
 ### 输入规范
 
@@ -80,5 +82,8 @@ visual studio 2019 + CMake
 
 ### 运行预览
 示例输入：
-![avatar](sample.png)
+
+![avatar](sample.png)  
+
 其他示例：
+![avatar](CAD.png)
