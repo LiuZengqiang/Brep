@@ -12,7 +12,9 @@ int main(int argc, char** argv)
 
 	sweeper->setScene(scene);
 	std::cout << "2. build scene." << std::endl;
-	sweeper->buildScene("D:\\VisualStudioWorkspace\\Brep\\Brep\\inputFile\\data.json");
+	/*sweeper->buildScene("D:\\VisualStudioWorkspace\\Brep\\Brep\\inputFile\\data.json");*/
+
+	sweeper->buildScene(".\\inputFile\\data.json");
 	
 	std::cout << "3. begin sweep." << std::endl;
 	sweeper->sweep();

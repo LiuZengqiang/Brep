@@ -1,0 +1,9 @@
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/CMakeFiles/edit_cache.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/CMakeFiles/rebuild_cache.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/CMakeFiles/edit_cache.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/CMakeFiles/Brep.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/CMakeFiles/rebuild_cache.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/src/CMakeFiles/edit_cache.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/src/CMakeFiles/sweeper_library.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/src/CMakeFiles/scene_library.dir
+D:/VisualStudioWorkspace/Brep/out/build/x64-Debug (默认值)/Brep/src/CMakeFiles/rebuild_cache.dir
