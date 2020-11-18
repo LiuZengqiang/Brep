@@ -275,3 +275,70 @@ Loop* Scene::eulerOperateKFMRH(Face* face_1, Face* face_2)
 
 	return in_loop;
 }
+
+std::vector<glm::vec2>& Scene::getOutline()
+{
+	return this->outline_;
+}
+
+std::vector<glm::vec2>& Scene::getInRing(int index)
+{
+	if (index>=in_ring_.size()) {
+		std::cerr << "ERROR: ths index of in_ring out of range, needed is [0," << in_ring_.size() << ") but get " << index << "." << std::endl;
+		return std::vector<glm::vec2>(1);
+	}
+	else {
+		return in_ring_[index];
+	}
+}
+
+int Scene::getInRingSize()
+{
+	return this->in_ring_.size();
+}
+
+void Scene::addInRing(std::vector<glm::vec2>  in_ring)
+{
+	this->in_ring_.push_back(in_ring);
+}
+
+glm::vec3 Scene::getSweepVector()
+{
+	return this->sweep_vector_;
+}
+
+void Scene::setSweepVector(glm::vec3 sweep_vector)
+{
+	this->sweep_vector_ = sweep_vector;
+}
+
+float Scene::getSweepScale()
+{
+	return this->sweep_scale_;
+}
+
+void Scene::setSweepScale(float sweep_scale)
+{
+	this->sweep_scale_ = sweep_scale;
+}
+
+Vertex* Scene::getVertex(int index)
+{
+	if (index>=all_vertexes.size()) {
+		std::cerr << "ERROR: vertex index out of range, needed is [0," << all_vertexes.size() << ") but get " << index << "." << std::endl;
+		return nullptr;
+	}
+	else {
+		return all_vertexes[index];
+	}
+}
+
+void Scene::addVertex(Vertex* vertex)
+{
+	this->all_vertexes.push_back(vertex);
+}
+
+int Scene::getVertexSize()
+{
+	return this->all_vertexes.size();
+}

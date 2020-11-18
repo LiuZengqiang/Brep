@@ -1,20 +1,26 @@
 #pragma once
 // 场景类，包含solids
 #include"datastruct/Solid.h"
-#include"datastruct/Face.h"
-#include"datastruct/Loop.h"
-#include"datastruct/Edge.h"
-#include"datastruct/Halfedge.h"
-#include"datastruct/Vertex.h"
 #include"glm/glm.hpp"
 #include<vector>
-
 class Scene
 {
 public:
 	Scene() {
 		this->now_solid_ = nullptr;
 		this->solid_cnt = this->face_cnt = this->loop_cnt = this->edge_cnt = this->vertex_cnt = this->halfedge_cnt = 0;
+		this->sweep_scale_ = 1.0f;
+
+		this->outline_.clear();
+		this->in_ring_.clear();
+		this->sweep_vector_ = glm::vec3(0.0f, 0.0f, -1.0f);
+		this->all_vertexes.clear();
+		// 
+		/*std::vector<glm::vec2>  outline_;
+		std::vector<std::vector<glm::vec2> > in_ring_;
+		glm::vec3 sweep_vector_;
+		float sweep_scale_;
+		std::vector<Vertex* > all_vertexes;*/
 	};
 
 	~Scene() {};
@@ -48,6 +54,21 @@ public:
 	*/
 	Loop* eulerOperateKFMRH(Face* face_1, Face* face_2);
 
+	std::vector<glm::vec2>&  getOutline();
+	std::vector<glm::vec2>& getInRing(int index);
+	int getInRingSize();
+
+	void addInRing(std::vector<glm::vec2>  in_ring);
+	glm::vec3 getSweepVector();
+	void setSweepVector(glm::vec3 sweep_vector);
+	
+	float getSweepScale();
+	void setSweepScale(float sweep_scale);
+	
+	Vertex* getVertex(int index);
+	void addVertex(Vertex* vertex);
+	int getVertexSize();
+
 private:
 	
 	Solid* now_solid_;	// 此时正在操作的solid 所有的欧拉变换都将在这个solid上进行 初始时为nullptr
@@ -58,4 +79,12 @@ private:
 	int edge_cnt;
 	int halfedge_cnt;
 	int vertex_cnt;
+
+	// 
+	std::vector<glm::vec2>  outline_;
+	std::vector<std::vector<glm::vec2> > in_ring_;
+	glm::vec3 sweep_vector_;
+	float sweep_scale_;
+	std::vector<Vertex* > all_vertexes;
+
 };

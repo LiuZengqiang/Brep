@@ -9,5 +9,4 @@ file(GLOB_RECURSE SCENE_HEADERS scene/*.h datastruct/*.h)
 file(GLOB_RECURSE SCENE_SOURCES scene/*.cpp datastruct/*.cpp)
 add_library(scene_library STATIC ${SCENE_HEADERS} ${SCENE_SOURCES})
 
-
 message("----END SCENE AND SWEEPER----")
