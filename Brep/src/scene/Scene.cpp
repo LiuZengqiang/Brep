@@ -1,34 +1,9 @@
 #include "Scene.h"
-#include "datastruct/AllDataStruct.h"
 #include <iostream>
 #include<string>
-std::vector<Solid*> Scene::getAllSolid()
-{
-	return this->solids_;
-}
-
-Solid* Scene::getSolid(int index)
-{
-	if (index < 0 || index >= this->solids_.size()) {
-		throw std::out_of_range("ERROR: Out of angle, need [0," + std::to_string(this->solids_.size() - 1) + "], get [" + std::to_string(index) + "] in Scene.cpp.\n");
-	}
-	else {
-		return this->solids_[index];
-	}
-	return nullptr;
-}
-
-Solid* Scene::getNowSolid()
+Solid* Scene::getSolid()
 {
 	return this->now_solid_;
-}
-
-
-void Scene::addSolid()
-{
-	Solid* temp_solid = new Solid(solid_cnt++, nullptr, nullptr, nullptr, nullptr);
-	this->now_solid_ = temp_solid;
-	this->solids_.push_back(temp_solid);
 }
 
 /*
@@ -46,7 +21,6 @@ Vertex* Scene::eulerOperateMVFS(glm::vec3 position)
 	
 	// relate 
 	this->now_solid_ = solid;
-	this->solids_.push_back(solid);
 
 	solid->addFace(face);
 	face->setOutLoop(loop);

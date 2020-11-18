@@ -1,12 +1,7 @@
 #pragma once
 // 画出来线框
-#include"datastruct/Solid.h"
-#include"datastruct/Face.h"
-#include"datastruct/Loop.h"
-#include"datastruct/Edge.h"
-#include"datastruct/Halfedge.h"
-#include"datastruct/Vertex.h"
 #include"Sweeper.h"
+
 #include"scene/Scene.h"
 #include"json/json.h"
 #define NDEBUG
@@ -130,14 +125,14 @@ void Sweeper::sweep()
 			temp_vertex = this->scene_->eulerOperateMVFS(vertex_position);
 			first_vertex = temp_vertex;
 			addVertex(temp_vertex);
-			first_loop = this->scene_->getSolid(0)->getFace()->getOutLoop();
+			first_loop = this->scene_->getSolid()->getFace()->getOutLoop();
 		}
 		else {
 			//中间的点，构造边
 			// make EV
 			// parameter: vertex_1, loop.
 			vertex_position = glm::vec3(this->outline_.vertexes[i], 0.0f);
-			temp_loop = this->scene_->getNowSolid()->getFace()->getOutLoop();
+			temp_loop = this->scene_->getSolid()->getFace()->getOutLoop();
 			temp_vertex = this->scene_->eulerOperateMEV(temp_vertex, temp_loop, vertex_position)->getSecondHalfedge()->getStartVertex();
 			addVertex(temp_vertex);
 		}
@@ -265,9 +260,11 @@ void Sweeper::sweep()
 // 显示每条loop的id normal halfedge position
 void Sweeper::showInfo()
 {
-	std::cout << "============Loop Data Information=============" << std::endl;
-	Solid* solid = this->scene_->getSolid(0);
 
+	std::cout << this->scene_->getSolid()->getId() << std::endl;
+	std::cout << "============Loop Data Information=============" << std::endl;
+	Solid* solid = this->scene_->getSolid();
+	
 	Face* face = solid->getFace();
 	
 	while (face!=nullptr) {
@@ -315,7 +312,7 @@ void Sweeper::myDisplay()
 	glRotatef(this->solidRotateAngle_[1], 1.0f, 0.0f, 0.0f);
 	glRotatef(this->solidRotateAngle_[0], 0.0f, 1.0f, 0.0f);
 
-	Solid* now_solid = this->scene_->getSolid(0);
+	Solid* now_solid = this->scene_->getSolid();
 	Face* now_face = now_solid->getFace();
 
 	Halfedge* halfedge = nullptr;

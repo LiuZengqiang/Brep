@@ -18,14 +18,9 @@ public:
 	};
 
 	~Scene() {};
-
-	// get and set
-	std::vector<Solid*> getAllSolid();
 	
-	Solid* getSolid(int index);
-	Solid* getNowSolid();
+	Solid* getSolid();
 	
-	void addSolid();
 	/*
 	* parameter: 新点的坐标
 	* return: 新点
@@ -54,7 +49,7 @@ public:
 	Loop* eulerOperateKFMRH(Face* face_1, Face* face_2);
 
 private:
-	std::vector<Solid*> solids_;	// all solids
+	
 	Solid* now_solid_;	// 此时正在操作的solid 所有的欧拉变换都将在这个solid上进行 初始时为nullptr
 	
 	int solid_cnt;

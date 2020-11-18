@@ -1,10 +1,4 @@
 #pragma once
-#include"datastruct/Solid.h"
-#include"datastruct/Face.h"
-#include"datastruct/Loop.h"
-#include"datastruct/Edge.h"
-#include"datastruct/Halfedge.h"
-#include"datastruct/Vertex.h"
 #include"scene/Scene.h"
 #define NDEBUG
 #include"freeglut/freeglut.h"
