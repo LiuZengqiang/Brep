@@ -15,12 +15,6 @@ public:
 		this->in_ring_.clear();
 		this->sweep_vector_ = glm::vec3(0.0f, 0.0f, -1.0f);
 		this->all_vertexes.clear();
-		// 
-		/*std::vector<glm::vec2>  outline_;
-		std::vector<std::vector<glm::vec2> > in_ring_;
-		glm::vec3 sweep_vector_;
-		float sweep_scale_;
-		std::vector<Vertex* > all_vertexes;*/
 	};
 
 	~Scene() {};
@@ -28,29 +22,28 @@ public:
 	Solid* getSolid();
 	
 	/*
-	* parameter: 新点的坐标
-	* return: 新点
+	* parameter: new vertex' position
+	* return: new vertex
 	*/
 	Vertex* eulerOperateMVFS(glm::vec3 position);
 	/*
-	* parameter: 第一个vertex，新边所在的loop，新vertex的坐标
-	* return: 新edge
+	* parameter: first vertex; the loop which contian the new edge; second vertex's position
+	* return: new edge
 	*/
 	Edge* eulerOperateMEV(Vertex* vertex_1, Loop* loop, glm::vec3 position);
 	/*
-	* parameter: 第一个vertex，第二个vertex，第一个和第二个vertex原来所在的loop
-	* return: 接下来需要操作的loop，这个loop与halfedge_2相关联，原loop与halfedge_1相关联。
-	* 在新建普通的边和建内环时的边时，输入参数vertex_1和vertex_2在实体中的顺序相反。
+	* parameter: first vertex; second vertex; the loop which contain first and second vertex
+	* return: new face's loop
 	*/
 	Loop* eulerOperateMEF(Vertex* vertex_1, Vertex* vertex_2, Loop* loop);
 	/*
-	* parameter: 需要被删除的edge
-	* return: 新生成的loop
+	* parameter: edge which will be killed
+	* return: new ring(loop)
 	*/
 	Loop* eulerOperateKEMR(Edge* edge);
 	/*
-	* parameter: 需要被删除的face，删除face后产生的loop所在的face
-	* return: 产生发loop
+	* parameter: the face's loop which will be kill; the new loop's face
+	* return: new loop
 	*/
 	Loop* eulerOperateKFMRH(Face* face_1, Face* face_2);
 
@@ -71,20 +64,20 @@ public:
 
 private:
 	
-	Solid* now_solid_;	// 此时正在操作的solid 所有的欧拉变换都将在这个solid上进行 初始时为nullptr
+	Solid* now_solid_;	// the solid in the scene(only one solid in one scene).
 	
-	int solid_cnt;
-	int face_cnt;
-	int loop_cnt;
-	int edge_cnt;
-	int halfedge_cnt;
-	int vertex_cnt;
+	int solid_cnt;		// solid number, for initialing solid'id
+	int face_cnt;		// face number, for initialing face'id
+	int loop_cnt;		// ...
+	int edge_cnt;		// ...
+	int halfedge_cnt;	// ...
+	int vertex_cnt;		// ...
 
 	// 
-	std::vector<glm::vec2>  outline_;
-	std::vector<std::vector<glm::vec2> > in_ring_;
-	glm::vec3 sweep_vector_;
-	float sweep_scale_;
-	std::vector<Vertex* > all_vertexes;
+	std::vector<glm::vec2>  outline_;				// the sweeped face's outline
+	std::vector<std::vector<glm::vec2> > in_ring_;	// the sweeped face's ring
+	glm::vec3 sweep_vector_;						// the sweep vector
+	float sweep_scale_;								// the sweep scale
+	std::vector<Vertex* > all_vertexes;				// all vertexes of new_solid_;
 
 };

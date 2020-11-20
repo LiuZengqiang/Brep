@@ -14,7 +14,8 @@ void Sweeper::buildScene(std::string input_file_path){
 	std::ifstream ifs;
 	ifs.open(input_file_path);
 	if (!ifs.is_open()) {
-		std::cerr << "ERROR: open file \"" << input_file_path << "\" fail in Sweeper.cpp_readFile()." << std::endl;
+		std::cerr << "ERROR: Open file:"<<input_file_path<<" fail, please check the file path." << std::endl;
+		exit(1);
 		return;
 	}
 
@@ -22,23 +23,21 @@ void Sweeper::buildScene(std::string input_file_path){
 	ifs >> root;
 	Json::Value face_vertexes = root["Face"]["Vertex"];
 	if (face_vertexes.isNull()) {
-		std::cerr << "ERROR: input file format error in \"Face\"\"Vertex\" in Sweeper.cpp." << std::endl;
+		std::cerr << "ERROR: File format error in \"Face\"\"Vertex\", please check the file format." << std::endl;
+		exit(1);
 		return;
 	}
 
 	for (unsigned int i = 0; i < face_vertexes.size(); i++) {
 		Json::Value temp_value = face_vertexes[i];
 		glm::vec2 temp_vec2 = glm::vec2(temp_value[0].asFloat(), temp_value[1].asFloat());
-		//this->outline_.push_back(temp_vec2);
-		
-		this->scene_->getOutline().push_back(temp_vec2);
 
-		std::cout << this->scene_->getOutline().size() << std::endl;
+		this->scene_->getOutline().push_back(temp_vec2);
 	}
 	 
 	Json::Value face_ring = root["Face"]["Ring"];
 	if (face_ring.isNull()) {
-		std::cout << "face_sing is null." << std::endl;
+		std::cout << "Info: There is no ring." << std::endl;
 	}
 	for (unsigned int i = 0; i < face_ring.size(); i++) {
 		std::vector<glm::vec2> temp_in_ring_outline;
@@ -48,7 +47,6 @@ void Sweeper::buildScene(std::string input_file_path){
 			glm::vec2 temp_vec2 = glm::vec2(temp_value[0].asFloat(), temp_value[1].asFloat());
 			temp_in_ring_outline.push_back(temp_vec2);
 		}
-		//this->in_ring_.push_back(temp_in_ring_outline);
 
 		this->scene_->addInRing(temp_in_ring_outline);
 	}
@@ -57,9 +55,6 @@ void Sweeper::buildScene(std::string input_file_path){
 		std::cout << "WARNING: input file format warning, \"SweepVector\" is null, using defalt value." << std::endl;
 	}
 	else {
-		/*this->sweep_vector_.x = sweep_vector[0].asFloat();
-		this->sweep_vector_.y = sweep_vector[1].asFloat();
-		this->sweep_vector_.z = sweep_vector[2].asFloat();*/
 
 		glm::vec3 temp_sweep_vector = glm::vec3(sweep_vector[0].asFloat(), sweep_vector[1].asFloat(), sweep_vector[2].asFloat());
 
@@ -89,9 +84,6 @@ void Sweeper::buildScene(std::string input_file_path){
 	std::cout << "End buildScene" << std::endl;
 	return;
 }
-
-
-
 void Sweeper::sweep()
 {
 	std::cout << "Begin Sweep" << std::endl;
@@ -100,62 +92,37 @@ void Sweeper::sweep()
 		return;
 	}
 	
-	// sweep
-	// 构造需要sweep的面， 并且sweep
-	// 经过此步骤，会形成一个没有内环，没有柄的体
-	// 先构造地面的平面
 	Vertex* temp_vertex = nullptr;
 	Vertex* first_vertex = nullptr;
 	Loop* temp_loop = nullptr;
-	// TODO:
-	// 底面的loop 和顶面的loop
 	Loop* first_loop = nullptr;
 	Loop* last_loop = nullptr;
 	
 	glm::vec3 vertex_position;
-	std::cout << "out line size():" << this->scene_->getOutline().size() << std::endl;
+	
 	for (int i = 0; i < this->scene_->getOutline().size(); i++) {
 		if (i==0) {
-			// 第一个点，构造的第一步
-			// 构造体/点/面/环?
 			vertex_position = glm::vec3(this->scene_->getOutline()[0], 0.0f);
 			temp_vertex = this->scene_->eulerOperateMVFS(vertex_position);
 			first_vertex = temp_vertex;
 			this->scene_->addVertex(temp_vertex);
-
-			std::cout << "vertex size is:" << this->scene_->getVertexSize() << std::endl;
 			first_loop = this->scene_->getSolid()->getFace()->getOutLoop();
 		}
 		else {
-			//中间的点，构造边
-			// make EV
-			// parameter: vertex_1, loop.
-			//vertex_position = glm::vec3(this->outline_[i], 0.0f);
+		
 			vertex_position = glm::vec3(this->scene_->getOutline()[i], 0.0f);
 			temp_loop = this->scene_->getSolid()->getFace()->getOutLoop();
 			temp_vertex = this->scene_->eulerOperateMEV(temp_vertex, temp_loop, vertex_position)->getSecondHalfedge()->getStartVertex();
 			this->scene_->addVertex(temp_vertex);
 		}
-
-
-		// 如果是最后一个点 mef
 		if (i==this->scene_->getOutline().size()-1) {
-			// 返回的是新loop
-			// MEF 
-			// input: 两个点，顺序满足h1方向, temp_loop 原来的loop
-			// output: 新产生的face的loop
-			//std::cout << "Begin last vertex." << std::endl;
-
 			temp_loop = this->scene_->eulerOperateMEF(temp_vertex, first_vertex, temp_loop);
 			
 			last_loop = temp_loop;
 		}
 	}
-	
-	// 构造n个柱子似的边和面
 
 	Vertex* pre = nullptr;
-	
 	for (int i = 0; i < this->scene_->getOutline().size(); i++) {
 		glm::vec3 scale = glm::vec3(this->scene_->getSweepScale());
 		vertex_position = glm::vec3(this->scene_->getOutline()[i], 0.0f);
@@ -176,26 +143,20 @@ void Sweeper::sweep()
 
 		}
 	}
-
-	temp_loop = this->scene_->eulerOperateMEF(pre, this->scene_->getVertex((int)this->scene_->getOutline().size()), temp_loop);
-	
+	temp_loop = this->scene_->eulerOperateMEF(pre, this->scene_->getVertex((int)this->scene_->getOutline().size()), temp_loop);	
 	last_loop = temp_loop;
 
-	//到此为止，可以构成一个环了吧。。。。
 	if (this->scene_->getInRingSize()<=0) {
 		std::cout << "WARRING: There is no ring in solid." << std::endl;
 	}
 
 	for (int i = 0; i < this->scene_->getInRingSize(); i++) {
-		/// mev -> mev ->mev -> ... -> mef -> kemr -> sweep
-
 		temp_vertex = first_vertex;
 		temp_loop = nullptr;
 
 		Edge* first_edge_in_loop = nullptr;
 
 		for (int j = 0; j < this->scene_->getInRing(i).size(); j++) {
-			// mev
 			vertex_position = glm::vec3(this->scene_->getInRing(i)[j], 0.0f);
 			Edge* temp_edge = this->scene_->eulerOperateMEV(temp_vertex, first_loop, vertex_position);
 			temp_vertex = temp_edge->getSecondHalfedge()->getStartVertex();
@@ -204,20 +165,17 @@ void Sweeper::sweep()
 				first_edge_in_loop = temp_edge;
 			}
 
-			// 最后一个点 mef
 			if (j == this->scene_->getInRing(i).size() - 1) {
 				Vertex* temp_vertex_1 = this->scene_->getVertex(this->scene_->getVertexSize()-this->scene_->getInRing(i).size());
 				Vertex* temp_vertex_2 = temp_vertex;
 				
 				temp_loop = this->scene_->eulerOperateMEF(temp_vertex_1, temp_vertex_2, first_loop);
-				//this->scene_->u
 				this->scene_->eulerOperateKEMR(first_edge_in_loop);
 			}
 		}
 
 		int index = (int)this->scene_->getVertexSize()-(int)this->scene_->getInRing(i).size();
-		
-		// sweep in loop
+
 		for (int j = 0; j < this->scene_->getInRing(i).size(); j++) {
 
 			glm::vec3 scale = glm::vec3(this->scene_->getSweepScale());
@@ -242,26 +200,16 @@ void Sweeper::sweep()
 
 		temp_loop = this->scene_->eulerOperateMEF(this->scene_->getVertex((int)this->scene_->getVertexSize()-(int)this->scene_->getInRing(i).size()), pre, temp_loop);
 
-		// KFMRH
-		if (temp_loop==nullptr || temp_loop->getFace()==nullptr || last_loop==nullptr||last_loop->getFace()==nullptr) {
-			std::cerr << "ERROR: temp_loop->getFace() || last_loop->getFace() is nullptr in Sweeper.cpp_sweep()." << std::endl;
-			return;
-		}
-		else {
-			this->scene_->eulerOperateKFMRH(temp_loop->getFace(), last_loop->getFace());
-		}
+		
+		this->scene_->eulerOperateKFMRH(temp_loop->getFace(), last_loop->getFace());
 	}
-
+	std::cout << std::endl;
 	std::cout << "End Sweep" << std::endl;
 	return;
 }
 
-// 用于显示生成的图形数据
-// 显示每条loop的id normal halfedge position
 void Sweeper::showInfo()
 {
-
-	std::cout << this->scene_->getSolid()->getId() << std::endl;
 	std::cout << "============Loop Data Information=============" << std::endl;
 	Solid* solid = this->scene_->getSolid();
 	
@@ -275,8 +223,6 @@ void Sweeper::showInfo()
 	std::cout << "============Loop Data Information=============" << std::endl;
 }
 
-
-///TODO: comlete myDisplay
 void Sweeper::myDisplay()
 {
 
@@ -284,8 +230,8 @@ void Sweeper::myDisplay()
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LINE_SMOOTH);
 
-	// 开启光照
-	glLightfv(GL_LIGHT0, GL_POSITION, this->lightPosition_);	//位置
+	// light
+	glLightfv(GL_LIGHT0, GL_POSITION, this->lightPosition_);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_COLOR_MATERIAL);
@@ -306,7 +252,6 @@ void Sweeper::myDisplay()
 	glRotatef(this->solidRotateAngle_[1], 1.0f, 0.0f, 0.0f);
 	glRotatef(this->solidRotateAngle_[0], 0.0f, 1.0f, 0.0f);
 
-	std::cout << this->solidRotateAngle_[1] << " " << this->solidRotateAngle_[0] << std::endl;
 
 	Solid* now_solid = this->scene_->getSolid();
 	Face* now_face = now_solid->getFace();
@@ -322,18 +267,18 @@ void Sweeper::myDisplay()
 	gluTessCallback(tobj, GLU_TESS_END, (void (CALLBACK*)())endCallbackS);
 
 
-	// 现在画所有的面
+	// draw all face
 	std::vector<std::vector<GLdouble>> points(100, std::vector<GLdouble>(3, 0.0f));
 	int index = 0;
 	int face_cnt = 0;
-	//now_face = nullptr;
+
 	while (now_face!=nullptr) {
 		face_cnt++;
-		// 画一个面
+		
 		gluTessBeginPolygon(tobj, nullptr);
 		index = 0;
 		glColor3f(this->solidColor_[0], this->solidColor_[1], this->solidColor_[2]);
-		// 画外轮廓
+		// draw outline
 		normal = now_face->getNormal();
 		glNormal3f(normal.x, normal.y, normal.z);
 		halfedge = now_face->getOutLoop()->getHalfedge();
@@ -349,7 +294,7 @@ void Sweeper::myDisplay()
 		} while (temp_halfedge!=halfedge);
 		gluTessEndContour(tobj);
 		
-		// 画内部的空洞
+		//draw hole
 		Loop* in_loop = now_face->getInLoop();
 		while (in_loop!=nullptr) {			
 			halfedge = in_loop->getHalfedge();
@@ -373,10 +318,10 @@ void Sweeper::myDisplay()
 	}
 	gluDeleteTess(tobj);
 
-	// 画轮廓
 	now_face = now_solid->getFace(0);
 	int cnt_vertex = 0;
 	
+	// draw edge
 	while (now_face!=nullptr) {
 		cnt_vertex = 0;
 		halfedge = now_face->getOutLoop()->getHalfedge();
@@ -390,27 +335,16 @@ void Sweeper::myDisplay()
 			temp_halfedge = temp_halfedge->getNext();
 		} while (temp_halfedge != halfedge);
 		glEnd();
-		//std::cout << "face id:"<<now_face->getId()<<"vertexes size:" << cnt_vertex << std::endl;
+
 		now_face = now_face->getNext();
 	}
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
 
-//Vertex* Sweeper::getVertex(int index)
-//{
-//	
-//	if (index>=this->scene_->getVertexSize()) {
-//		std::cerr << "ERROR: the index of vertex need [0," << this->scene_->getVertexSize() << "], but get " << index << " in Sweeper.cpp_getVertex()." << std::endl;
-//		return nullptr;
-//	}
-//	return this->scene_->getVertex(index);
-//}
 
 void Sweeper::draw()
 {
-	std::cout << "Begin Sweeper.draw()." << std::endl;
-	
 	int argc = 0;
 	char** argv = nullptr;
 	
@@ -422,14 +356,11 @@ void Sweeper::draw()
 
 	glutInitWindowSize(800, 800);
 
-	glutCreateWindow("Sth's CAD homework.");
+	glutCreateWindow("12021032's CAD homework.");
 	glutKeyboardFunc(Sweeper::keyBoardsCallbackS);
-	//this->setupDisplayCallback();
 
 	glutDisplayFunc(Sweeper::displayCallback);
-	//glutDisplayFunc(Sweeper::displayCallback);
 	
 	glutMainLoop();
 	
-	std::cout << "End Sweeper.draw()." << std::endl;
 }

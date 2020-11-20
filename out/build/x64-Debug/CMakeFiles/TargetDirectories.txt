@@ -1,9 +1,0 @@
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/CMakeFiles/edit_cache.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/CMakeFiles/Brep.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/CMakeFiles/rebuild_cache.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/src/CMakeFiles/edit_cache.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/src/CMakeFiles/sweeper_library.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/src/CMakeFiles/scene_library.dir
-D:/VisualStudioWorkspace/Brep/out/build/x64-Debug/Brep/src/CMakeFiles/rebuild_cache.dir
