@@ -2,7 +2,7 @@
 
 ### 环境
 
-freeglut + glm + JsonCpp
+freeglut + glm + JsonCpp  
 visual studio 2019 + CMake
 
 ### 实现功能
@@ -35,7 +35,7 @@ visual studio 2019 + CMake
 
 6. "SweepScale"建议小一点（默认身为0.1），太大时会超出窗口。
 
-示例：
+输入示例：
 ```json
 {
   "Face": {
@@ -79,11 +79,15 @@ visual studio 2019 + CMake
   ]
 }
 ```
+### 直接运行
+在命令行中直接运行Brep.exe文件+输入文件路径，默认读取同目录下./inputFile/data.json文件作为输入
+运行示例：
+
 
 ### 运行预览
-示例输入：
+示例预览：  
 
 ![avatar](sample.png)  
 
-其他示例：
+其他示例预览：  
 ![avatar](CAD.png)
