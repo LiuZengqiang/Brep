@@ -80,14 +80,10 @@ visual studio 2019 + CMake
 }
 ```
 ### 直接运行
-在命令行中直接运行Brep.exe文件+输入文件路径，默认读取同目录下./inputFile/data.json文件作为输入
-运行示例：
+在命令行中直接运行Brep.exe文件+输入文件路径，默认读取同目录下./inputFile/data.json文件作为输入。  
+在英文输入状态下使用W、A、S、D可以转动视点，2、4、6、8键移动光源方向。  
+命令运行示例：  
+![avatar](run_1.png)
 
+![avatar](run_2.png)
 
-### 运行预览
-示例预览：  
-
-![avatar](sample.png)  
-
-其他示例预览：  
-![avatar](CAD.png)
